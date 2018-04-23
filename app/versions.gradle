@@ -1,5 +1,6 @@
 ext {
   support7Version = '27.1.1'
+  support4Version = '27.1.1'
   constraintVersion = '1.1.0'
   retrofitVersion = '2.4.0'
   javaxAnnotation = '10.0-b28'
@@ -13,4 +14,6 @@ ext {
   espressoVersion = '3.0.1'
 
   facebookVersion = '[4,5)'
+
+  googlemapVersion = "15.0.0"
 }

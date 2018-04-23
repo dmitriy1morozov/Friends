@@ -1,21 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:tools="http://schemas.android.com/tools"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
-		tools:context=".ui.ProfileFragment"
-		>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+  <android.support.constraint.ConstraintLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:context=".main.profile.ProfileFragment"
+      >
 
+    <TextView
+        android:id="@+id/text_profile_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:drawableStart="@drawable/profile_back"
+        android:gravity="center"
+        android:minHeight="0dp"
+        android:text="@string/profile_back"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
+    <Button
+        android:id="@+id/button_profile_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:minHeight="0dp"
+        android:text="@string/profile_done"
+        android:textAllCaps="false"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
-		<TextView
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				app:layout_constraintTop_toTopOf="parent"
-				app:layout_constraintLeft_toLeftOf="parent"
-				android:text="PROFILE"
-				/>
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66"
+        />
+    <ImageView
+        android:id="@+id/image_profile_picture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/profile_default"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/text_profile_back"
+        />
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/button_profile_edit_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="0dp"
+        android:text="@string/profile_edit_image"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="@id/image_profile_picture"
+        app:layout_constraintTop_toBottomOf="@id/image_profile_picture"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textinput_profile_firstname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/profile_first_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_profile_edit_image"
+        >
+
+      <EditText
+          android:id="@+id/edittext_profile_firstname"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textinput_profile_lastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="@string/profile_last_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textinput_profile_firstname"
+        >
+
+      <EditText
+          android:id="@+id/edittext_profile_lastname"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          />
+    </android.support.design.widget.TextInputLayout>
+
+    <RadioGroup
+        android:id="@+id/radiogroup_profile_gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textinput_profile_lastname"
+        >
+
+      <RadioButton
+          android:id="@+id/radio_profile_male"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/profile_male"
+          />
+
+      <RadioButton
+          android:id="@+id/radio_profile_female"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/profile_female"
+          />
+    </RadioGroup>
+
+  </android.support.constraint.ConstraintLayout>
+</ScrollView>

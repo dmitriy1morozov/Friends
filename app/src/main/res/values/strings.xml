@@ -1,9 +1,18 @@
 <resources>
-		<string name="app_name">My Application</string>
+  <string name="app_name">Friends</string>
 
-		<string name="facebook_app_id">1637129439866047</string>
-		<string name="fb_login_protocol_scheme">fb1637129439866047</string>
+  <string name="googlemap_api_key">AIzaSyBCwGQhBaMGkj2yvXE-xkxcsMTECVF88cs</string>
 
-		<string name="login_logo_url">http://www.logotypes101.com/logos/737/73B231EDE81008F1BB550913D2EFDC60/Friends.png</string>
+  <string name="facebook_app_id">1637129439866047</string>
+  <string name="fb_login_protocol_scheme">fb1637129439866047</string>
+
+  <string name="login_logo_url">http://www.logotypes101.com/logos/737/73B231EDE81008F1BB550913D2EFDC60/Friends.png</string>
+  <string name="profile_edit_image">Edit profile image</string>
+  <string name="profile_first_name">First name</string>
+  <string name="profile_last_name">Last name</string>
+  <string name="profile_male">Male</string>
+  <string name="profile_female">Female</string>
+  <string name="profile_done">Done</string>
+  <string name="profile_back">Back</string>
 
 </resources>

@@ -12,8 +12,21 @@ android {
   }
   buildTypes {
     release {
+      resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+    debug{
+      resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
+    }
+  }
+
+  signingConfigs {
+    debug {
+      storeFile file('../test_app_debug_key.keystore')
+    }
+    release {
+      storeFile file('../test_app_debug_key.keystore')
     }
   }
 }
@@ -21,13 +34,12 @@ android {
 apply from: 'versions.gradle'
 
 dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-  implementation 'com.android.support:support-v4:27.1.1'
+  implementation fileTree(include: ['*.jar'], dir: 'libs')
   testImplementation "junit:junit:$junitVersion"
   androidTestImplementation "com.android.support.test:runner:$runnerVersion"
   androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
-
+  implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+  implementation "com.android.support:support-v4:$support4Version"
   implementation "com.android.support:appcompat-v7:$support7Version"
   implementation "com.android.support:design:$support7Version"
   implementation "com.android.support.constraint:constraint-layout:$constraintVersion"
@@ -45,4 +57,6 @@ dependencies {
   annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
   implementation "com.facebook.android:facebook-android-sdk:$facebookVersion"
+
+  implementation "com.google.android.gms:play-services-maps:$googlemapVersion"
 }
