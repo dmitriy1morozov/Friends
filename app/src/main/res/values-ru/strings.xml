@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Друзья</string>
+
+  <string name="googlemap_api_key">AIzaSyBCwGQhBaMGkj2yvXE-xkxcsMTECVF88cs</string>
+
+  <string name="main_gps_permissions_declined">Чтобы продолжить использовать карту, включите GPS</string>
+  <string name="main_gps_permissions_grant">Разрешить</string>
+  <string name="main_dialog_no_network">Нет соединения с сетью</string>
+  <string name="main_dialog_enable_network">Чтобы продолжить использовать приложение, включите сеть в настройках</string>
+  <string name="main_tab_title_list">Список</string>
+  <string name="main_tab_title_map">Карта</string>
+  <string name="main_tab_title_profile">Профиль</string>
+  <string name="profile_logout">Выход</string>
+  <string name="map_dialog_name">Имя</string>
+  <string name="map_dialog_new_marker">Создать маркер</string>
+  <string name="map_save_marker">Сохранить маркер</string>
+  <string name="map_permissions_required">GPS разрешение существенно необходимо для использования карты. Пожалуйста, дайте разрешения на GPS</string>
+  <string name="list_no_data">Нет данных для отображения. Добавьте маркеры на карте</string>
+  <string name="viewholder_to_map">На карту</string>
+</resources>

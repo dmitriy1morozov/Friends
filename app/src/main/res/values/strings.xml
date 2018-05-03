@@ -3,16 +3,19 @@
 
   <string name="googlemap_api_key">AIzaSyBCwGQhBaMGkj2yvXE-xkxcsMTECVF88cs</string>
 
-  <string name="facebook_app_id">1637129439866047</string>
-  <string name="fb_login_protocol_scheme">fb1637129439866047</string>
-
-  <string name="login_logo_url">http://www.logotypes101.com/logos/737/73B231EDE81008F1BB550913D2EFDC60/Friends.png</string>
-  <string name="profile_edit_image">Edit profile image</string>
-  <string name="profile_first_name">First name</string>
-  <string name="profile_last_name">Last name</string>
-  <string name="profile_male">Male</string>
-  <string name="profile_female">Female</string>
-  <string name="profile_done">Done</string>
-  <string name="profile_back">Back</string>
+  <string name="main_gps_permissions_declined">To continue using map functionality please grant GPS permissions</string>
+  <string name="main_gps_permissions_grant">Grant</string>
+  <string name="main_dialog_no_network">No Internet connection</string>
+  <string name="main_dialog_enable_network">To continue using the application please enable network in your device settings</string>
+  <string name="main_tab_title_list">List</string>
+  <string name="main_tab_title_map">Map</string>
+  <string name="main_tab_title_profile">Profile</string>
+  <string name="profile_logout">Log out</string>
+  <string name="map_dialog_name">Name</string>
+  <string name="map_dialog_new_marker">Create marker</string>
+  <string name="map_save_marker">Save marker</string>
+  <string name="map_permissions_required">This application requires GPS permissions to use map functionality. This is a vital permission. Please grant permissions</string>
+  <string name="list_no_data">No data to display. Please proceed to map and add markers</string>
+  <string name="viewholder_to_map">To map</string>
 
 </resources>

@@ -1,101 +1,140 @@
 package com.gbksoft.android.test.app.main;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.util.Log;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.facebook.AccessToken;
+import com.firebase.ui.auth.AuthUI;
 import com.gbksoft.android.test.app.R;
+import com.gbksoft.android.test.app.data.pojo.User;
 import com.gbksoft.android.test.app.main.list.ListFragment;
 import com.gbksoft.android.test.app.main.map.MapFragment;
-import com.gbksoft.android.test.app.main.profile.OnSaveProfileListener;
 import com.gbksoft.android.test.app.main.profile.ProfileFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import java.util.Arrays;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnSaveProfileListener {
+public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener, UserSelectedListener {
 
   public static final String PREF_NAME = "com.gbksoft.android.test.app";
-  public static final String BUNDLE_SHOULD_SETUP_PROFILE = "profileSetup";
+
+  private static final String TAG = "MyLogs MainActivity";
+  private static final String BUNDLE_SIGNED_ID = "isSignedIn";
+  private static final int RC_SIGN_IN = 123;
 
   @BindView(R.id.tabs_main_menu) TabLayout mMenuTabLayout;
   @BindView(R.id.viewpager_main_root) MyViewPager mRootViewPager;
-
-  private ViewPagerAdapter mViewPagerAdapter;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
-
-    initViewPager();
   }
 
   @Override protected void onStart() {
+    Log.d(TAG, "onStart: ");
     super.onStart();
-    if(!isFacebookLoggedIn()) {
-      navigateToLoginActivity();
-      return;
+    if(!isNetworkAvailable()) {
+      askToEnableNetwork();
     }
+    initViewPager();
+    FirebaseAuth.getInstance().addAuthStateListener(this);
+  }
 
-    SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-    Boolean isInitialSetup = prefs.getBoolean(BUNDLE_SHOULD_SETUP_PROFILE, false);
-
-    int profileTabPosition = mViewPagerAdapter.getTabPosition(ProfileFragment.TAB_NAME);
-    int mapTabPosition = mViewPagerAdapter.getTabPosition(MapFragment.TAB_NAME);
-    if(isInitialSetup && profileTabPosition != -1) {
-      mRootViewPager.setCurrentItem(profileTabPosition);
-      hideBottomMenu();
-    } else {
-      mRootViewPager.setCurrentItem(mapTabPosition);
-      showBottomMenu();
+  @Override protected void onResume() {
+    Log.d(TAG, "onResume: ");
+    super.onResume();
+    if(getSignedInUserId() == null) {
+      navigateToLoginActivity();
     }
   }
 
-  @Override public void saveProfile() {
-    SharedPreferences prefs = getSharedPreferences(MainActivity.PREF_NAME, MainActivity.MODE_PRIVATE);
-    prefs.edit().putBoolean(MainActivity.BUNDLE_SHOULD_SETUP_PROFILE, false).apply();
-    showBottomMenu();
-    int mapTabPosition = mViewPagerAdapter.getTabPosition(MapFragment.TAB_NAME);
-    mRootViewPager.setCurrentItem(mapTabPosition);
+  @Override protected void onStop() {
+    super.onStop();
+    FirebaseAuth.getInstance().removeAuthStateListener(this);
   }
 
   //==============================================================================================
   public void navigateToLoginActivity() {
-    Intent upIntent = NavUtils.getParentActivityIntent(this);
-    if(NavUtils.shouldUpRecreateTask(MainActivity.this, upIntent) || isTaskRoot()) {
-      TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent).startActivities();
+    if(isNetworkAvailable()) {
+      List<AuthUI.IdpConfig> providers = Arrays.asList(
+          new AuthUI.IdpConfig.EmailBuilder().build(),
+          new AuthUI.IdpConfig.GoogleBuilder().build());
+      Intent loginIntent = AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build();
+      startActivityForResult(loginIntent, RC_SIGN_IN);
     } else {
-      NavUtils.navigateUpTo(MainActivity.this, upIntent);
+      askToEnableNetwork();
     }
+  }
+
+  public String getSignedInUserId() {
+    SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+    return preferences.getString(BUNDLE_SIGNED_ID, null);
+  }
+
+  @Override public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+    SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+    preferences.edit().putString(BUNDLE_SIGNED_ID, firebaseAuth.getUid()).apply();
+  }
+
+  @Override public void selectUser(User user) {
+    Log.d(TAG, "selectUser: " + user.getName());
+    String mapTabTitle = getResources().getString(R.string.main_tab_title_map);
+    int mapTabIndex = ((MyViewPagerAdapter) mRootViewPager.getAdapter()).getTabPosition(mapTabTitle);
+    mRootViewPager.setCurrentItem(mapTabIndex, true);
+    // When the FragmentPagerAdapter adds a fragment to the FragmentManager, it uses a special tag based on the particular position that the fragment will be placed.
+    // FragmentPagerAdapter.getItem(int position) is only called when a fragment for that position does not exist.
+    // After rotating, Android will notice that it already created/saved a fragment for this particular position
+    // and so it simply tries to reconnect with it with FragmentManager.findFragmentByTag()
+    // https://stackoverflow.com/a/15182405
+    MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(
+        "android:switcher:" + mRootViewPager.getId() + ":" + mapTabIndex);
+    mapFragment.selectUser(user);
   }
 
   //==============================================================================================
   private void initViewPager() {
-    mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-    mViewPagerAdapter.addFragment(new MapFragment(), MapFragment.TAB_NAME);
-    mViewPagerAdapter.addFragment(new ListFragment(), ListFragment.TAB_NAME);
-    mViewPagerAdapter.addFragment(new ProfileFragment(), ProfileFragment.TAB_NAME);
-    mRootViewPager.setAdapter(mViewPagerAdapter);
+    Log.d(TAG, "initViewPager: ");
+    MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
+    myViewPagerAdapter.addFragment(new ListFragment(), getResources().getString(R.string.main_tab_title_list));
+    myViewPagerAdapter.addFragment(new MapFragment(), getResources().getString(R.string.main_tab_title_map));
+    myViewPagerAdapter.addFragment(new ProfileFragment(), getResources().getString(R.string.main_tab_title_profile));
+    mRootViewPager.setAdapter(myViewPagerAdapter);
     mMenuTabLayout.setupWithViewPager(mRootViewPager);
   }
 
-  private boolean isFacebookLoggedIn() {
-    AccessToken accessToken = AccessToken.getCurrentAccessToken();
-    return accessToken != null;
+  private boolean isNetworkAvailable() {
+    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    assert connectivityManager != null;
+    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
   }
 
-  private void hideBottomMenu() {
-    mMenuTabLayout.setVisibility(View.GONE);
-    mRootViewPager.disableScroll();
-  }
-
-  private void showBottomMenu() {
-    mMenuTabLayout.setVisibility(View.VISIBLE);
-    mRootViewPager.enableScroll();
+  private void askToEnableNetwork() {
+    AlertDialog.Builder dialogBuidler = new AlertDialog.Builder(this);
+    dialogBuidler.setTitle(R.string.main_dialog_no_network);
+    dialogBuidler.setMessage(R.string.main_dialog_enable_network);
+    dialogBuidler.setCancelable(false);
+    dialogBuidler.setPositiveButton("Turn on Wifi", (dialog, which) -> {
+      startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+    });
+    dialogBuidler.setNegativeButton("Turn on mobile data", (dialog, which) -> {
+      Intent intent = new Intent();
+      intent.setComponent(
+          new ComponentName("com.android.settings", "com.android.settings.Settings$DataUsageSummaryActivity"));
+      startActivity(intent);
+    });
+    dialogBuidler.create().show();
   }
 }

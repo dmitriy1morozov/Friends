@@ -13,7 +13,9 @@ ext {
   runnerVersion = '1.0.1'
   espressoVersion = '3.0.1'
 
-  facebookVersion = '[4,5)'
+  googlePlayVersion = '15.0.0'
+  googleMapsUtilsVersion = '0.5'
 
-  googlemapVersion = "15.0.0"
+  firebaseUiVersion = '3.3.1'
+  firebaseVersion = '15.0.0'
 }

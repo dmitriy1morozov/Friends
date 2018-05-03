@@ -4,7 +4,7 @@ android {
   compileSdkVersion 27
   defaultConfig {
     applicationId "com.gbksoft.android.test.app"
-    minSdkVersion 23
+    minSdkVersion 21
     targetSdkVersion 27
     versionCode 1
     versionName "1.0"
@@ -21,13 +21,9 @@ android {
     }
   }
 
-  signingConfigs {
-    debug {
-      storeFile file('../test_app_debug_key.keystore')
-    }
-    release {
-      storeFile file('../test_app_debug_key.keystore')
-    }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
   }
 }
 
@@ -38,7 +34,7 @@ dependencies {
   testImplementation "junit:junit:$junitVersion"
   androidTestImplementation "com.android.support.test:runner:$runnerVersion"
   androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
-  implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+
   implementation "com.android.support:support-v4:$support4Version"
   implementation "com.android.support:appcompat-v7:$support7Version"
   implementation "com.android.support:design:$support7Version"
@@ -53,10 +49,18 @@ dependencies {
   implementation "com.jakewharton:butterknife:$butterKnifeVersion"
   annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
 
-  implementation "com.github.bumptech.glide:glide:$glideVersion"
-  annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+//  implementation "com.github.bumptech.glide:glide:$glideVersion"
+//  annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
-  implementation "com.facebook.android:facebook-android-sdk:$facebookVersion"
+  implementation "com.google.android.gms:play-services-maps:$googlePlayVersion"
+  implementation "com.google.android.gms:play-services-location:$googlePlayVersion"
+  implementation "com.google.android.gms:play-services-auth:$googlePlayVersion"
+  implementation "com.google.maps.android:android-maps-utils:$googleMapsUtilsVersion"
 
-  implementation "com.google.android.gms:play-services-maps:$googlemapVersion"
+  implementation "com.google.firebase:firebase-core:$firebaseVersion"
+  implementation "com.google.firebase:firebase-auth:$firebaseVersion"
+  implementation "com.google.firebase:firebase-database:$firebaseVersion"
+  implementation "com.firebaseui:firebase-ui-auth:$firebaseUiVersion"
 }
+
+apply plugin: 'com.google.gms.google-services'

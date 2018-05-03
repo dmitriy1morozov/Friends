@@ -1,0 +1,21 @@
+<resources>
+  <string name="app_name">Друзі</string>
+
+  <string name="googlemap_api_key">AIzaSyBCwGQhBaMGkj2yvXE-xkxcsMTECVF88cs</string>
+
+  <string name="main_gps_permissions_declined">Щоб продовжити використовувати мапу ввімкніть GPS</string>
+  <string name="main_gps_permissions_grant">Дозволити</string>
+  <string name="main_dialog_no_network">Немає з\'єднання з мережею</string>
+  <string name="main_dialog_enable_network">Щоб продовжити використовувати додаток, ввімкніть мережу в налаштуваннях</string>
+  <string name="main_tab_title_list">Перелік</string>
+  <string name="main_tab_title_map">Мапа</string>
+  <string name="main_tab_title_profile">Профіль</string>
+  <string name="profile_logout">Вихід</string>
+  <string name="map_dialog_name">Ім\'я</string>
+  <string name="map_dialog_new_marker">Створити маркер</string>
+  <string name="map_save_marker">Зберегти маркер</string>
+  <string name="map_permissions_required">GPS дозвіл істотно необхідний для використання мапи. Будь ласка, додайте дозволи на GPS</string>
+  <string name="list_no_data">Немає даних для відображення. Додайте маркери на мапі</string>
+  <string name="viewholder_to_map">На мапу</string>
+
+</resources>

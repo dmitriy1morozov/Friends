@@ -22,8 +22,8 @@
       android:layout_height="64dp"
       app:tabBackground="@drawable/item_border"
       app:tabGravity="fill"
-      app:tabIndicatorColor="@android:color/holo_blue_bright"
-      app:tabIndicatorHeight="8dp"
+      app:tabIndicatorColor="@color/colorPrimary"
+      app:tabIndicatorHeight="4dp"
       app:tabMode="fixed"
       app:tabTextAppearance="@style/TabTextAppearance"
       />

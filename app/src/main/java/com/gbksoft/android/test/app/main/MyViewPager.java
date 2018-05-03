@@ -6,37 +6,32 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 public class MyViewPager extends ViewPager {
-  private Boolean mIsScrollEnabled = true;
+
+  private Boolean mIsScrollEnabled = false;
 
   public MyViewPager(Context context) {
     super(context);
   }
-  public MyViewPager(Context context, AttributeSet attrs){
-    super(context,attrs);
+
+  public MyViewPager(Context context, AttributeSet attrs) {
+    super(context, attrs);
   }
+
   @Override
   public boolean onInterceptTouchEvent(MotionEvent event) {
-    if(mIsScrollEnabled){
+    if(mIsScrollEnabled) {
       return super.onInterceptTouchEvent(event);
-    }else{
+    } else {
       return false;
     }
   }
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
-    if(mIsScrollEnabled){
+    if(mIsScrollEnabled) {
       return super.onTouchEvent(event);
-    }else{
+    } else {
       return false;
     }
   }
-
-  public void disableScroll(){
-    this.mIsScrollEnabled = false;
-  }
-  public void enableScroll(){
-    this.mIsScrollEnabled = true;
-  }
 }
-

@@ -17,8 +17,6 @@
       map:layout_constraintLeft_toLeftOf="parent"
       map:layout_constraintRight_toRightOf="parent"
       map:layout_constraintBottom_toBottomOf="parent"
-      android:layout_marginLeft="8dp"
-      android:layout_marginRight="8dp"
       android:name="com.google.android.gms.maps.SupportMapFragment"
       tools:context="ccom.gbksoft.android.test.app.main.map.MapFragment"
       map:cameraZoom="13"
