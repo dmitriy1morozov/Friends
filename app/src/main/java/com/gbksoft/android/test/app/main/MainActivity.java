@@ -67,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
   //==============================================================================================
   public void navigateToLoginActivity() {
+    String profileTabTitle = getResources().getString(R.string.main_tab_title_profile);
+    int profileTabIndex = ((MyViewPagerAdapter) mRootViewPager.getAdapter()).getTabPosition(profileTabTitle);
+    mRootViewPager.setCurrentItem(profileTabIndex, true);
     if(isNetworkAvailable()) {
       List<AuthUI.IdpConfig> providers = Arrays.asList(
           new AuthUI.IdpConfig.EmailBuilder().build(),
