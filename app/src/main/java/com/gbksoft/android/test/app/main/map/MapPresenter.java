@@ -4,8 +4,10 @@ import android.util.Log;
 import com.gbksoft.android.test.app.data.DataContract;
 import com.gbksoft.android.test.app.data.Model;
 import com.gbksoft.android.test.app.data.pojo.User;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.maps.android.SphericalUtil;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -36,16 +38,18 @@ public class MapPresenter implements MapContract.Presenter, DataContract.Present
     }
   }
 
-  @Override public void mapChanged(LatLngBounds mapRectangle) {
+  @Override public void mapChanged(LatLngBounds newRectangle) {
     Log.d(TAG, "mapChanged: ");
-    mView.removeMarkers();
-    mObservingRectangle = mapRectangle;
+    LatLngBounds oldRectangle = mObservingRectangle;
+
     for(User user : mTotalUsers) {
       LatLng position = new LatLng(user.getLat(), user.getLon());
-      if(mObservingRectangle.contains(position)) {
+      if(newRectangle.contains(position) && !oldRectangle.contains(position)) {
         mView.dispatchUser(user);
       }
     }
+    mObservingRectangle = newRectangle;
+    mView.removeOutsideMarkers(mObservingRectangle);
   }
 
   @Override public void addUser(User user) {

@@ -41,6 +41,7 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 public class MapFragment extends Fragment
     implements MapContract.View, UserSelectedListener,
@@ -60,6 +61,7 @@ public class MapFragment extends Fragment
   private MyClusterRenderer mRenderer;
   private User mSelectedUser;
   private Marker mLastClickedMarker;
+  private ArrayList<CustomCluster> mVisibleClusterItems = new ArrayList<>();
 
   private MapContract.Presenter mPresenter;
 
@@ -158,8 +160,8 @@ public class MapFragment extends Fragment
   @Override public void onCameraIdle() {
     Log.d(TAG, "onCameraIdle: ");
     LatLngBounds mapRectangle = mGoogleMap.getProjection().getVisibleRegion().latLngBounds;
-    mPresenter.mapChanged(mapRectangle);
     mClusterManager.onCameraIdle();
+    mPresenter.mapChanged(mapRectangle);
   }
 
   @Override public boolean onClusterClick(Cluster<CustomCluster> cluster) {
@@ -223,6 +225,7 @@ public class MapFragment extends Fragment
   @Override public void dispatchUser(User user) {
     Log.d(TAG, "dispatchUser: " + user.toString());
     CustomCluster newCluster = new CustomCluster(user);
+    mVisibleClusterItems.add(newCluster);
     mClusterManager.addItem(newCluster);
     mClusterManager.cluster();
   }
@@ -230,16 +233,29 @@ public class MapFragment extends Fragment
   @Override public void removeUser(String uid) {
     Log.d(TAG, "userRemoved: ");
     User removingUser = new User(uid);
+    CustomCluster removingCluster = new CustomCluster(removingUser);
+    mVisibleClusterItems.remove(removingCluster);
     if(mClusterManager != null) {
-      mClusterManager.removeItem(new CustomCluster(removingUser));
+      mClusterManager.removeItem(removingCluster);
       mClusterManager.cluster();
     }
   }
 
-  @Override public void removeMarkers() {
+  @Override public void removeOutsideMarkers(LatLngBounds visibleRectangle) {
     Log.d(TAG, "removeMarkers: ");
-    mGoogleMap.clear();
-    mClusterManager.clearItems();
+    if(mVisibleClusterItems.size() == 0){
+      return;
+    }
+
+    ArrayList<CustomCluster> removingClusterItems = new ArrayList<>();
+    for(CustomCluster clusterItem:mVisibleClusterItems) {
+      if(!visibleRectangle.contains(clusterItem.getPosition())){
+        mClusterManager.removeItem(clusterItem);
+        removingClusterItems.add(clusterItem);
+      }
+    }
+    mVisibleClusterItems.removeAll(removingClusterItems);
+    mClusterManager.cluster();
   }
 
   @Override public void selectUser(User user) {

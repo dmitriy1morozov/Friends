@@ -15,6 +15,6 @@ public interface MapContract {
     void displayError(String error);
     void dispatchUser(User users);
     void removeUser(String uid);
-    void removeMarkers();
+    void removeOutsideMarkers(LatLngBounds visibleRectangle);
   }
 }

@@ -82,11 +82,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
   }
 
   public String getSignedInUserId() {
+    Log.d(TAG, "getSignedInUserId: ");
     SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
     return preferences.getString(BUNDLE_SIGNED_ID, null);
   }
 
   @Override public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+    Log.d(TAG, "onAuthStateChanged: ");
     SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
     preferences.edit().putString(BUNDLE_SIGNED_ID, firebaseAuth.getUid()).apply();
   }
