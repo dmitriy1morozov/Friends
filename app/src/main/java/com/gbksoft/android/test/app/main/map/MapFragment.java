@@ -267,7 +267,7 @@ public class MapFragment extends Fragment
           moveToDevicePosition();
         } else {
           Snackbar.make(mMapView, getString(R.string.map_permissions_required),
-              Snackbar.LENGTH_INDEFINITE).setAction("Grant", v -> launchAppSettingsActivity()).show();
+              Snackbar.LENGTH_LONG).setAction("Grant", v -> launchAppSettingsActivity()).show();
         }
         break;
       default:
